@@ -1,6 +1,12 @@
-import type { Asset, Crop } from "../../../shared/document";
+import type { Crop } from "../../../shared/document";
+/**
+ * 把任意图像源（静态图片或视频当前帧）按裁剪区域缩采样到字符网格，
+ * 视频与图片共用此函数，保证每一帧沿用同一套裁剪规则。
+ */
 export function sample(
-  asset: Asset,
+  source: CanvasImageSource,
+  sourceWidth: number,
+  sourceHeight: number,
   crop: Crop,
   columns: number,
   rows: number,
@@ -13,11 +19,11 @@ export function sample(
   g.fillStyle = background;
   g.fillRect(0, 0, columns, rows);
   g.drawImage(
-    asset.image,
-    crop.x * asset.width,
-    crop.y * asset.height,
-    crop.width * asset.width,
-    crop.height * asset.height,
+    source,
+    crop.x * sourceWidth,
+    crop.y * sourceHeight,
+    crop.width * sourceWidth,
+    crop.height * sourceHeight,
     0,
     0,
     columns,

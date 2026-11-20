@@ -1,10 +1,27 @@
 <script setup lang="ts">
+import { ref, watch, onMounted, nextTick } from "vue";
 import type { Asset, Crop } from "../../../shared/document";
-defineProps<{ asset: Asset; crop: Crop }>();
+const props = defineProps<{ asset: Asset; crop: Crop }>();
+const host = ref<HTMLElement>();
+function mount() {
+  if (props.asset.kind === "video" && host.value)
+    host.value.replaceChildren(props.asset.image);
+}
+onMounted(mount);
+watch(
+  () => props.asset,
+  () => nextTick(mount),
+);
 </script>
 <template>
   <div class="crop-image">
-    <img :src="asset.url" :alt="asset.name" draggable="false" />
+    <img
+      v-if="asset.kind === 'image'"
+      :src="asset.url"
+      :alt="asset.name"
+      draggable="false"
+    />
+    <div v-else ref="host" class="crop-video" />
     <div
       class="crop-box"
       :style="{

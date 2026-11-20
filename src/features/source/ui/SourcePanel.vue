@@ -19,19 +19,25 @@ function change(e: Event) {
       @dragover.prevent
       @drop.prevent="s.file($event.dataTransfer?.files[0])"
       ><ImagePlus :size="25" /><strong>{{
-        s.loading.value ? "读取中…" : "拖入你的图片"
+        s.loading.value ? "读取中…" : "拖入你的图片或视频"
       }}</strong
-      ><small>或点击选择文件 · PNG / JPG / WEBP</small
+      ><small>或点击选择文件 · PNG / JPG / WEBP / MP4 / WEBM</small
       ><input
         type="file"
-        accept="image/png,image/jpeg,image/webp"
+        accept="image/png,image/jpeg,image/webp,video/*"
         @change="change" /></label
     ><button class="demo" @click="s.demo">
       <Mountain :size="14" /> 使用山脉示例 <span>↗</span>
     </button>
     <div v-if="s.doc.asset" class="file-info">
       <span>{{ s.doc.asset.name }}</span
-      ><small>{{ s.doc.asset.width }} × {{ s.doc.asset.height }} px</small>
+      ><small
+        >{{ s.doc.asset.width }} × {{ s.doc.asset.height }} px<template
+          v-if="s.doc.asset.kind === 'video'"
+        >
+          · {{ s.doc.asset.duration.toFixed(2) }}s</template
+        ></small
+      >
     </div>
   </section>
 </template>

@@ -3,11 +3,17 @@ import { computed } from "vue";
 import { Code2, Scan, Minus, Plus } from "lucide-vue-next";
 import { usePreview } from "../model/usePreview";
 import { gridRows } from "../lib/rows";
+import { TransportBar } from "../../video";
 import ArtCanvas from "./ArtCanvas.vue";
 const p = usePreview();
 const text = computed(() =>
   p.doc.grid ? gridRows(p.doc.grid).join("\n") : "",
 );
+const changedPct = computed(() => {
+  const v = p.video.changed.value;
+  if (v === null || !p.doc.grid?.cells.length) return null;
+  return ((v / p.doc.grid.cells.length) * 100).toFixed(1);
+});
 </script>
 <template>
   <main class="workspace">
@@ -49,23 +55,40 @@ const text = computed(() =>
             fontSize: (14 * p.zoom.value) / 100 + 'px',
             lineHeight: (16 * p.zoom.value) / 100 + 'px',
           }"
-          >{{ text }}</pre>
+          >{{ text }}</pre
+        >
         <span v-else>正在准备字符画…</span>
       </div>
       <div class="stage-corner">
         {{ p.doc.grid?.columns }} COL × {{ p.doc.grid?.rows }} ROW
       </div>
     </div>
+    <TransportBar v-if="p.video.active.value" />
     <div class="preview-bottom">
       <span class="mono"
         ><i class="status-dot" />{{
-          p.busy.value
-            ? "生成中"
-            : p.doc.grid?.revision === p.doc.revision
-              ? "已同步"
-              : "待重新生成"
+          p.video.active.value
+            ? p.video.playing.value
+              ? "播放中"
+              : p.video.rendering.value
+                ? "渲染中"
+                : "已暂停"
+            : p.busy.value
+              ? "生成中"
+              : p.doc.grid?.revision === p.doc.revision
+                ? "已同步"
+                : "待重新生成"
         }}
         <span class="muted">/ {{ p.count.value }} 个字符</span></span
+      >
+      <span
+        class="mono flicker-metric"
+        v-if="p.video.active.value"
+        title="本帧与上一采样帧之间字符发生变化的单元数：静止画面下越小越不闪，运动画面下滞后越多拖影越明显"
+        >Δ 相邻帧变化:
+        {{
+          p.video.changed.value === null ? "—" : p.video.changed.value
+        }}<template v-if="changedPct"> ({{ changedPct }}%)</template></span
       >
       <div class="zoom">
         <button

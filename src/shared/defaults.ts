@@ -13,6 +13,13 @@ export function createDocument(): StudioDocument {
       color: true,
       background: "#101216",
     },
+    video: {
+      start: 0,
+      end: 0,
+      fps: 12,
+      temporal: "detail",
+      strength: 0.6,
+    },
     grid: null,
     revision: 0,
   };

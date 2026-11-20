@@ -4,6 +4,7 @@ import { useWorkspace } from "./useWorkspace";
 import { SourcePanel } from "../features/source";
 import { CropPanel } from "../features/crop";
 import { MappingPanel } from "../features/mapping";
+import { TimelinePanel } from "../features/video";
 import { PreviewPanel } from "../features/preview";
 import { ExportPanel } from "../features/export";
 const w = useWorkspace();
@@ -19,21 +20,21 @@ const w = useWorkspace();
       >
       <div class="header-right">
         <span><LockKeyhole :size="12" /> 本地处理 · 无需上传</span
-        ><span class="version">V.1.0 <ArrowUpRight :size="12" /></span>
+        ><span class="version">V.1.1 <ArrowUpRight :size="12" /></span>
       </div>
     </header>
     <div class="intro">
       <div>
         <div class="eyebrow"><span /> THE ART OF LESS</div>
-        <h1>让图像，用字符说话<span>。</span></h1>
-        <p>把细腻光影，转译成有温度的 ASCII 艺术。</p>
+        <h1>让影像，用字符说话<span>。</span></h1>
+        <p>把细腻光影与流动瞬间，转译成有温度的 ASCII 艺术。</p>
       </div>
       <div class="intro-code">
         . : - = + * # % @<small>PIXELS → CHARACTERS → ART</small>
       </div>
     </div>
     <div class="editor">
-      <aside><SourcePanel /><CropPanel /><MappingPanel /></aside>
+      <aside><SourcePanel /><CropPanel /><MappingPanel /><TimelinePanel /></aside>
       <div class="result"><PreviewPanel /><ExportPanel /></div>
     </div>
     <footer>
